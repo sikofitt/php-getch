@@ -17,7 +17,7 @@ use RuntimeException;
 
 final class Getch
 {
-    private const LINUX_LIBRARY = __DIR__ . '/Resources/libgetch.so';
+    private const LINUX_LIBRARY = __DIR__ . '/Resources/libgetwch.so';
     private const WINDOWS_LIBRARY = 'ucrtbase.dll';
 
     private static ?FFI $ffi = null;
