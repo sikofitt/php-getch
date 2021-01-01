@@ -4,6 +4,7 @@ pages:
   stage: deploy
   script:
     - ls
+    - ls -lh
   artifacts:
     paths:
       - public
