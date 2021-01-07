@@ -1,19 +1,37 @@
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
+#include <stdlib.h>
+static struct termios oldattr;
+
+static void setRawMode(void)
+{
+    struct termios newattr;
+
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    cfmakeraw(&newattr);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+
+}
+static void setNormalMode(void)
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+}
+
 
 /* reads from keypress, doesn't echo */
 int _getch(void)
 {
-    struct termios oldattr, newattr;
     int ch;
-    tcgetattr( STDIN_FILENO, &oldattr );
-    newattr = oldattr;
-    cfmakeraw(&newattr);
-    //newattr.c_lflag &= ~( ICANON | ECHO );
-    //tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+
+    setRawMode();
+    atexit(setNormalMode);
+
     ch = getchar();
-    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+
+    setNormalMode();
+
     return ch;
 }
 
