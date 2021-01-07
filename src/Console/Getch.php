@@ -31,13 +31,13 @@ final class Getch
         if (self::$ffi === null) {
             $osFamily = PHP_OS_FAMILY;
             if ($osFamily === 'Windows') {
-                self::$ffi = FFI::cdef('char _getch();', self::WINDOWS_LIBRARY);
+                self::$ffi = FFI::cdef('char _getch(); int _ungetch(char c);', self::WINDOWS_LIBRARY);
             } elseif ($osFamily === 'Linux') {
                 if (!file_exists($linuxLibrary)) {
                     throw new RuntimeException(sprintf('Could not find library file %s.', $linuxLibrary));
                 }
 
-                self::$ffi = FFI::cdef('char _getch(); int _ungetch(int ch);', $linuxLibrary);
+                self::$ffi = FFI::cdef('char _getch(); int _ungetch(char ch);', $linuxLibrary);
             } else {
                 throw new RuntimeException(sprintf('Sorry, %s is not supported yet.', $osFamily));
             }
@@ -51,6 +51,21 @@ final class Getch
 
     public function ungetch(string $char)
     {
-        return self::$ffi->_ungetch($char);
+        return self::$ffi->_ungetch($char[0]);
+    }
+
+    public function ungetchString(string $string): bool
+    {
+        $stringReverse = \strrev($string);
+        $result = false;
+
+        foreach(\str_split($stringReverse) as $char) {
+            $result = self::$ffi->_ungetch($char) > 0;
+            if(!$result) {
+                return false;
+            }
+        }
+
+        return $result;
     }
 }

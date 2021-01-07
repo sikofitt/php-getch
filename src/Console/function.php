@@ -28,3 +28,12 @@ if(!function_exists('ungetch')) {
         return $g->ungetch($char);
     }
 }
+
+if(!function_exists('ungetchString')) {
+    function ungetchString(string $string, string $linuxLibrary = null): bool
+    {
+        $g = new Getch($linuxLibrary);
+
+        return $g->ungetchString($string);
+    }
+}

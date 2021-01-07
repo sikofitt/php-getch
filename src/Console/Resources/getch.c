@@ -16,7 +16,7 @@ int _getch(void)
     return ch;
 }
 
-int _ungetch(int ch)
+int _ungetch(char ch)
 {
     return ungetc(ch, stdin);
 }
