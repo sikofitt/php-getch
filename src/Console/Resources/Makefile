@@ -2,8 +2,8 @@ CC = gcc
 CFLAGS = -shared -Wall -fPIC
 
 all:
-	@${CC} ${CFLAGS} getwch.c -o libgetwch.so
+	@${CC} ${CFLAGS} getch.c -o libgetch.so
 clean:
-	@rm -f libgetwch.so
+	@rm -f libgetch.so
 	
 	

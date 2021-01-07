@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 /* reads from keypress, doesn't echo */
-int _getwch(void)
+int _getch(void)
 {
     struct termios oldattr, newattr;
     int ch;
@@ -14,4 +14,9 @@ int _getwch(void)
     ch = getchar();
     tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
     return ch;
+}
+
+int _ungetch(int ch)
+{
+    return ungetc(ch, stdin);
 }

@@ -8,9 +8,9 @@ $ composer require sikofitt/getch:dev-master
 
 ```php
  use Sikofitt\Console\Getch;
- $g = new Getch($linuxLibrary = null); // can also be a library that implements a function called _getwch;
-                                       // by default uses the bundled Resources/libgetwch.so
-                                       // on windows uses the built in _getwch function.
+ $g = new Getch($linuxLibrary = null); // can also be a library that implements a function called _getch;
+                                       // by default uses the bundled Resources/libgetch.so
+                                       // on windows uses the built in _getch function.
  $char = $g->getch();
  print $char;
 ```
