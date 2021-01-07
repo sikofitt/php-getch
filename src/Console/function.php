@@ -19,3 +19,12 @@ if (!function_exists('getch')) {
         return $g->getch();
     }
 }
+
+if(!function_exists('ungetch')) {
+
+    function ungetch(string $char, string $linuxLibrary = null): int
+    {
+        $g = new Getch($linuxLibrary);
+        return $g->ungetch($char);
+    }
+}
