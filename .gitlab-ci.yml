@@ -9,7 +9,7 @@ before_script:
   - apt-get update -yqq
   - apt-get install -yqq git libzip-dev unzip zip zlib1g-dev libxml2-dev libpcre3-dev
   # Install PHP extensions
-  - docker-php-ext-install zip
+  - docker-php-ext-install zip ffi
   # Install & enable Xdebug for code coverage reports
   - pecl install xdebug
   - docker-php-ext-enable xdebug
