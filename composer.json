@@ -1,22 +1,28 @@
 {
     "name": "sikofitt/getch",
-    "description": "Implements getch and getwch for windows and linux using ffi",
+    "description": "Implements _getch and _ungetch for windows and linux using ffi",
     "type": "library",
     "require": {
         "php": ">=7.4",
         "ext-ffi": "*"
     },
   "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.17",
-        "jetbrains/phpstorm-stubs": "dev-master"
+        "friendsofphp/php-cs-fixer": "^2.18",
+        "jetbrains/phpstorm-stubs": "dev-master",
+        "phpunit/phpunit": "^9.5"
     },
   "autoload": {
     "psr-4": {
       "Sikofitt\\Console\\": "src/Console/"
     },
     "files": [
-      "src/Console/function.php"
+      "functions.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Sikofitt\\Tests\\Console\\": "tests/"
+    }
   },
   "license": "MPL-2.0",
     "authors": [

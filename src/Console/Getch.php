@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 /*
  * Copyright (c) 2020  https://rewiv.com sikofitt@gmail.com
@@ -17,8 +19,12 @@ use RuntimeException;
 
 final class Getch
 {
-    private const LINUX_LIBRARY = __DIR__ . '/Resources/libgetch.so';
+    private const LINUX_LIBRARY = __DIR__.'/Resources/libgetch.so';
     private const WINDOWS_LIBRARY = 'ucrtbase.dll';
+    private const DECLARATIONS = <<<DECLARATIONS
+        int _getch();
+        int _ungetch(int c);
+    DECLARATIONS;
 
     private static ?FFI $ffi = null;
 
@@ -28,44 +34,37 @@ final class Getch
             $linuxLibrary = self::LINUX_LIBRARY;
         }
 
-        if (self::$ffi === null) {
+        if (null === self::$ffi) {
             $osFamily = PHP_OS_FAMILY;
-            if ($osFamily === 'Windows') {
-                self::$ffi = FFI::cdef('char _getch(); int _ungetch(char c);', self::WINDOWS_LIBRARY);
-            } elseif ($osFamily === 'Linux') {
+            if ('Windows' === $osFamily) {
+                self::$ffi = FFI::cdef(self::DECLARATIONS, self::WINDOWS_LIBRARY);
+            } elseif ('Linux' === $osFamily) {
                 if (!file_exists($linuxLibrary)) {
                     throw new RuntimeException(sprintf('Could not find library file %s.', $linuxLibrary));
                 }
 
-                self::$ffi = FFI::cdef('char _getch(); int _ungetch(char ch);', $linuxLibrary);
+                self::$ffi = FFI::cdef(self::DECLARATIONS, $linuxLibrary);
             } else {
                 throw new RuntimeException(sprintf('Sorry, %s is not supported yet.', $osFamily));
             }
         }
     }
 
-    public function getch(): string
+    public function getch(): int
     {
         return self::$ffi->_getch();
     }
 
-    public function ungetch(string $char)
+    public function ungetch($char): int
     {
-        return self::$ffi->_ungetch($char[0]);
-    }
-
-    public function ungetchString(string $string): bool
-    {
-        $stringReverse = \strrev($string);
-        $result = false;
-
-        foreach(\str_split($stringReverse) as $char) {
-            $result = self::$ffi->_ungetch($char) > 0;
-            if(!$result) {
-                return false;
-            }
+        if (!is_string($char) && !is_int($char)) {
+            throw new \TypeError('ungetch takes a parameter of int or string.');
         }
 
-        return $result;
+        if (is_string($char)) {
+            $char = ord($char[0]);
+        }
+
+        return self::$ffi->_ungetch($char);
     }
 }
