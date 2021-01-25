@@ -2,6 +2,8 @@
 cache:
   paths:
     - vendor/
+variables:
+  XDEBUG_MODE: coverage
 
 before_script:
   - apt-get update -yqq
