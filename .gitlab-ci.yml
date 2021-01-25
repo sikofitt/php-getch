@@ -7,7 +7,7 @@ variables:
 
 before_script:
   - apt-get update -yqq
-  - apt-get install -yqq git libzip unzip zip zlib1g-dev libxml2-dev libpcre3-dev
+  - apt-get install -yqq git libzip-dev unzip zip zlib1g-dev libxml2-dev libpcre3-dev
   # Install PHP extensions
   - docker-php-ext-install zip
   # Install & enable Xdebug for code coverage reports
