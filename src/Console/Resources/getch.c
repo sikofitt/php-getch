@@ -4,12 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <fcntl.h>
 
 #define CTRL_KEY(k) ((k) & 0x1f)
 
 static struct termios oldattr;
-static int stdin_flags;
 
 /*
 static char *strrev(char *str)
@@ -30,23 +28,15 @@ static char *strrev(char *str)
 static void setNormalMode(void)
 {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-    fcntl(STDIN_FILENO, F_SETFL, stdin_flags);
 }
 
 static void setRawMode(void)
 {
     tcgetattr(STDIN_FILENO, &oldattr);
-    atexit(setNormalMode);
 
     struct termios raw = oldattr;
 
-    raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-    raw.c_oflag &= ~(OPOST);
-    raw.c_cflag |= (CS8);
-    raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
-    raw.c_cc[VMIN] = 0;
-    raw.c_cc[VTIME] = 1;
-
+    cfmakeraw(&raw);
     tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 
 }
@@ -87,12 +77,12 @@ void _ungetc(int c) {
 
 int readKey(void) {
 
-int bytesRead;
 
-    char key;
 
-    while ((key = fgetc(stdin)) == EOF) {
-    }
+
+
+    int key = getchar();
+
 
     if (key == '\x1b') {
         char seq[4];
@@ -161,6 +151,7 @@ int bytesRead;
 
 int _getch(void) {
 
+    atexit(setNormalMode);
     setRawMode();
 
     int key = readKey();
