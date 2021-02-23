@@ -80,6 +80,22 @@ final class Getch
         }
     }
 
+/*    public function keyCode(string $device): array
+    {
+
+        $arrayType = \FFI::arrayType(self::$ffi->type('int'), [3]);
+        $res = \FFI::new($arrayType);
+
+        $arrayType = self::$ffi->keyCode($device);
+
+        return [
+            'type' => $arrayType[0],
+            'code' => $arrayType[1],
+            'value' => $arrayType[2],
+            'keyCode' => $arrayType[3],
+        ];
+    }*/
+
     public function getch(): int
     {
         return self::$ffi->_getch();
