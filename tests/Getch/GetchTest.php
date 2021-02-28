@@ -70,4 +70,14 @@ class GetchTest extends TestCase
         self::assertEquals(0, $g->getch());
         self::assertEquals(71, $g->getch());
     }
+
+    public function setPeek()
+    {
+        $g = new Getch();
+        $g->ungetch('q');
+        $peek = $g->peek();
+        $getch = $g->getch();
+        self::assertEquals($peek, $getch);
+        self::assertEquals(113, $peek);
+    }
 }

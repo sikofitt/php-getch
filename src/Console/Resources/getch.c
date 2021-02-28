@@ -20,6 +20,33 @@
 
 static struct termios oldTermAttributes;
 
+inline static void reverseString(char * str)
+{
+    if (str)
+    {
+        char * end = str + strlen(str) - 1;
+
+        // swap the values in the two given variables
+        // XXX: fails when a and b refer to same memory location
+#   define XOR_SWAP(a,b) do\
+    {\
+      (a) ^= (b);\
+      (b) ^= (a);\
+      (a) ^= (b);\
+    } while (0)
+
+        // walk inwards from both ends of the string,
+        // swapping until we get to the middle
+        while (str < end)
+        {
+            XOR_SWAP(*str, *end);
+            str++;
+            end--;
+        }
+#   undef XOR_SWAP
+    }
+}
+
 static int discardRead(unsigned int length)
 {
     char buffer[length];
@@ -37,7 +64,7 @@ static int discardRead(unsigned int length)
     return (int)bytesRead;
 }
 
-static int getEventDevice(const char * device)
+static int getEventDevice(char ** device)
 {
     glob_t search;
 
@@ -63,7 +90,8 @@ static int getEventDevice(const char * device)
     for(int i = 0; i<search.gl_pathc;i++) {
         if(access(search.gl_pathv[i], F_OK) == 0) {
             pathLength = strlen(search.gl_pathv[i]) + 1;
-            strncpy((char *)device, search.gl_pathv[i], pathLength);
+            *device = (char *)malloc(pathLength);
+            strcpy(*device, search.gl_pathv[i]);
             globfree(&search);
             return 1;
         }
@@ -75,30 +103,38 @@ static int getEventDevice(const char * device)
 
 static unsigned short getScanCode()
 {
-    struct input_event inputEvent[3];
+    struct input_event inputEvent[40];
     int eventDevice;
 
-    const char device[FILENAME_MAX];
-    if(getEventDevice(device) == -1) {
+    char *device;
+    if(getEventDevice(&device) == -1) {
          perror("getEventDevice");
+         free(device);
         return KEY_RESERVED;
     }
 
     if( ( eventDevice = open(device, O_RDONLY)) == -1 ) {
+        free(device);
         perror("open");
         return KEY_RESERVED;
     };
 
-
+    free(device);
 
     if( read(eventDevice, &inputEvent, sizeof(inputEvent)) == -1) {
         close(eventDevice);
+        perror("read");
         return KEY_RESERVED;
     }
 
     close(eventDevice);
 
-    for(int i = 0;i<3;i++) {
+   // for(int i = 0;i<39;i++) {
+   //     printf("Type %d, Code %d, Value %d\r\n", inputEvent[i].type, inputEvent[i].code, inputEvent[i].value);
+   // }
+
+    for(int i = 0;i<40;i++) {
+        //printf("Type %d, Code %d\n", inputEvent[i].type, inputEvent[i].code);
         if(inputEvent[i].type == EV_KEY && inputEvent[i].code != KEY_ENTER) {
             return inputEvent[i].code;
         }
@@ -152,7 +188,7 @@ static int readKey(void) {
 
         unsigned short scanCode = getScanCode();
 
-        if (scanCode == KEY_ESC || scanCode == KEY_RESERVED) {
+        if (scanCode == KEY_ESC ) {
             return 27;
         }
 
@@ -170,19 +206,23 @@ static int readKey(void) {
             case KEY_F2:
             case KEY_F3:
             case KEY_F4:
-
             case KEY_KP1: // END
             case KEY_KP2: // DOWN
             case KEY_KP4: // LEFT
             case KEY_KP6: // RIGHT
             case KEY_KP7: // HOME
             case KEY_KP8: // UP
+                //getchar();
+                //getchar();
                 discardBytes = 2;
                 break;
             case KEY_KP0: // INSERT
             case KEY_KPDOT: // DELETE
             case KEY_KP9: // PAGEUP
             case KEY_KP3: // PAGEDOWN
+            /*getchar();
+            getchar();
+            getchar(); */
                 discardBytes = 3;
                 break;
             case KEY_F5:
@@ -193,11 +233,16 @@ static int readKey(void) {
             case KEY_F10:
             case KEY_F11:
             case KEY_F12:
+          /*      getchar();
+                getchar();
+                getchar();
+                getchar(); */
                 discardBytes = 4;
                 break;
 
             default:
                 discardBytes = 0;
+                break;
         }
 
         if (discardBytes != 0) {
@@ -227,4 +272,42 @@ int _getch(void) {
 int _ungetch(int ch)
 {
     return ungetc(ch, stdin);
+}
+
+int *cinPeekCount(ushort count)
+{
+    char buffer[count];
+
+    int flags = fcntl(STDIN_FILENO, F_GETFL);
+
+    fcntl(STDIN_FILENO, F_SETFL, flags|O_NONBLOCK);
+
+    size_t byteCount = fread(&buffer, sizeof(char), count, stdin);
+
+    fcntl(STDIN_FILENO, F_SETFL, flags);
+
+    int *res = (int*)malloc(byteCount);
+
+    for(int i=0;i<byteCount;i++)
+    {
+            res[i] = (int)buffer[i];
+    }
+
+    reverseString(buffer);
+
+    for(int i=0;i<byteCount;i++) {
+        pushStdin(buffer[i]);
+    }
+
+    return res;
+}
+
+int cinPeek()
+{
+    int flags = fcntl(STDIN_FILENO, F_GETFL);
+    fcntl(STDIN_FILENO, F_SETFL, flags|O_NONBLOCK);
+    int result = fgetc(stdin);
+    fcntl(STDIN_FILENO, F_SETFL, flags);
+    ungetc(result, stdin);
+    return result;
 }

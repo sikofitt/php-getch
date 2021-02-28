@@ -67,19 +67,32 @@ final class Getch
         if (null === self::$ffi) {
             $osFamily = PHP_OS_FAMILY;
             if ('Windows' === $osFamily) {
-                self::$ffi = FFI::cdef(self::DECLARATIONS, self::WINDOWS_LIBRARY);
+                $declarations = self::DECLARATIONS . ' int _kbhit();';
+                self::$ffi = FFI::cdef($declarations, self::WINDOWS_LIBRARY);
             } elseif ('Linux' === $osFamily) {
                 if (!file_exists($linuxLibrary)) {
                     throw new RuntimeException(sprintf('Could not find library file %s.', $linuxLibrary));
                 }
-
-                self::$ffi = FFI::cdef(self::DECLARATIONS, $linuxLibrary);
+                $declarations = self::DECLARATIONS . ' int cinPeek();';
+                self::$ffi = FFI::cdef($declarations, $linuxLibrary);
             } else {
                 throw new RuntimeException(sprintf('Sorry, %s is not supported yet.', $osFamily));
             }
         }
     }
 
+    public function peek(): int
+    {
+        if(PHP_OS_FAMILY === 'Windows') {
+            if($ffi->_kbhit()) {
+                $result = $ffi->_getch();
+                $ffi->_ungetch($result);
+                return $result;
+            }
+            return -1;
+        }
+        return $ffi->cinPeek();
+    }
 /*    public function keyCode(string $device): array
     {
 
