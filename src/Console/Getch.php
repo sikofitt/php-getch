@@ -88,8 +88,8 @@ final class Getch
 
     public function peek(): int
     {
-        if(PHP_OS_FAMILY === 'Windows') {
-            if($ffi->_kbhit()) {
+        if (PHP_OS_FAMILY === 'Windows') {
+            if ($ffi->_kbhit()) {
                 $result = $ffi->_getch();
                 $ffi->_ungetch($result);
                 return $result;
@@ -98,21 +98,6 @@ final class Getch
         }
         return $ffi->cinPeek();
     }
-/*    public function keyCode(string $device): array
-    {
-
-        $arrayType = \FFI::arrayType(self::$ffi->type('int'), [3]);
-        $res = \FFI::new($arrayType);
-
-        $arrayType = self::$ffi->keyCode($device);
-
-        return [
-            'type' => $arrayType[0],
-            'code' => $arrayType[1],
-            'value' => $arrayType[2],
-            'keyCode' => $arrayType[3],
-        ];
-    }*/
 
     public function getch(): int
     {
