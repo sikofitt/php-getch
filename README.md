@@ -2,6 +2,9 @@
 
 This simply uses the FFI extension to enable _getch and _ungetch in Windows and linux.
 
+[![pipeline status](https://repos.bgemi.net/sikofitt/getch/badges/1.x/pipeline.svg)](https://repos.bgemi.net/sikofitt/getch/-/commits/1.x)
+[![coverage report](https://repos.bgemi.net/sikofitt/getch/badges/1.x/coverage.svg)](https://repos.bgemi.net/sikofitt/getch/-/commits/1.x)
+
 ```shell script
 $ composer require sikofitt/getch:dev-master
 ```
