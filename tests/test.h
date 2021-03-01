@@ -13,5 +13,7 @@ typedef struct _iobuf
 
 FILE *stdin;
 
+FILE *fopen(const char *filename, const char *mode);
+
 int ungetc(int ch, FILE *stream);
 

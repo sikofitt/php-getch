@@ -34,14 +34,14 @@ class UngetchTest extends TestCase
 
     public function testForFun()
     {
-        foreach(\str_split(\strrev('Hello World!')) as $char) {
+        foreach (\str_split(\strrev('Hello World!')) as $char) {
             ungetch($char);
         }
         $result = '';
         do {
             $ord = getch();
             $result .= \chr($ord);
-        } while($ord !== ord('!'));
+        } while ($ord !== ord('!'));
         self::assertSame('Hello World!', $result);
     }
 }
