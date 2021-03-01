@@ -20,29 +20,34 @@ use RuntimeException;
 final class Getch
 {
     // Special key codes
-    public const GETCH_SPECIAL = 0;
-    public const GETCH_F1 = 59;
-    public const GETCH_F2 = 60;
-    public const GETCH_F3 = 61;
-    public const GETCH_F4 = 62;
-    public const GETCH_F5 = 63;
-    public const GETCH_F6 = 64;
-    public const GETCH_F7 = 65;
-    public const GETCH_F8 = 66;
-    public const GETCH_F9 = 67;
-    public const GETCH_F10 = 68;
-    public const GETCH_F11 = 87;
-    public const GETCH_F12 = 88;
-    public const GETCH_UP_ARROW = 72;
-    public const GETCH_LEFT_ARROW = 75;
-    public const GETCH_RIGHT_ARROW = 77;
-    public const GETCH_DOWN_ARROW = 80;
-    public const GETCH_DELETE = 83;
-    public const GETCH_HOME = 102;
-    public const GETCH_PGUP = 104;
-    public const GETCH_END = 107;
-    public const GETCH_PGDN = 109;
-    public const GETCH_INSERT = 110;
+    // Extended scan code used to indicate special keyboard functions
+    public const KEY_RESERVED = 0;
+    public const KEY_E0 = 0;
+    public const KEY_E1 = 224;
+
+    // Supported scan scodes.
+    public const KEY_F1 = 59;
+    public const KEY_F2 = 60;
+    public const KEY_F3 = 61;
+    public const KEY_F4 = 62;
+    public const KEY_F5 = 63;
+    public const KEY_F6 = 64;
+    public const KEY_F7 = 65;
+    public const KEY_F8 = 66;
+    public const KEY_F9 = 67;
+    public const KEY_F10 = 68;
+    public const KEY_F11 = 87;
+    public const KEY_F12 = 88;
+    public const KEY_UP = 72;
+    public const KEY_LEFT = 75;
+    public const KEY_RIGHT = 77;
+    public const KEY_DOWN = 80;
+    public const KEY_DELETE = 83;
+    public const KEY_HOME = 71;
+    public const KEY_PAGEUP = 73;
+    public const KEY_END = 79;
+    public const KEY_PAGEDOWN = 81;
+    public const KEY_INSERT = 82;
 
     private const LINUX_LIBRARY = __DIR__.'/Resources/libgetch.so';
     private const WINDOWS_LIBRARY = 'ucrtbase.dll';

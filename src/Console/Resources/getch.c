@@ -13,10 +13,16 @@
 #include <linux/input.h>
 #include <glob.h>
 
+#define EVENT_DEVICE_GLOB "/dev/input/by-path/*-event-kbd"
+
 #define FKEY(k) ((k) >= KEY_F1 && (k) <= KEY_F10) || (k) == KEY_F12 || (k) == KEY_F11
 #define NOTNUMPAD(k) ((k) >= KEY_HOME && (k) <= KEY_DELETE)
-
-#define EVENT_DEVICE_GLOB "/dev/input/by-path/*-event-kbd"
+#define XOR_SWAP(a,b) do\
+    {\
+      (a) ^= (b);\
+      (b) ^= (a);\
+      (a) ^= (b);\
+    } while (0)
 
 static struct termios oldTermAttributes;
 
@@ -26,24 +32,12 @@ inline static void reverseString(char * str)
     {
         char * end = str + strlen(str) - 1;
 
-        // swap the values in the two given variables
-        // XXX: fails when a and b refer to same memory location
-#   define XOR_SWAP(a,b) do\
-    {\
-      (a) ^= (b);\
-      (b) ^= (a);\
-      (a) ^= (b);\
-    } while (0)
-
-        // walk inwards from both ends of the string,
-        // swapping until we get to the middle
         while (str < end)
         {
             XOR_SWAP(*str, *end);
             str++;
             end--;
         }
-#   undef XOR_SWAP
     }
 }
 
@@ -103,7 +97,7 @@ static int getEventDevice(char ** device)
 
 static unsigned short getScanCode()
 {
-    struct input_event inputEvent[40];
+    struct input_event inputEvent[5];
     int eventDevice;
 
     char *device;
@@ -129,12 +123,7 @@ static unsigned short getScanCode()
 
     close(eventDevice);
 
-   // for(int i = 0;i<39;i++) {
-   //     printf("Type %d, Code %d, Value %d\r\n", inputEvent[i].type, inputEvent[i].code, inputEvent[i].value);
-   // }
-
-    for(int i = 0;i<40;i++) {
-        //printf("Type %d, Code %d\n", inputEvent[i].type, inputEvent[i].code);
+    for(int i = 0;i<5;i++) {
         if(inputEvent[i].type == EV_KEY && inputEvent[i].code != KEY_ENTER) {
             return inputEvent[i].code;
         }
@@ -212,17 +201,12 @@ static int readKey(void) {
             case KEY_KP6: // RIGHT
             case KEY_KP7: // HOME
             case KEY_KP8: // UP
-                //getchar();
-                //getchar();
                 discardBytes = 2;
                 break;
             case KEY_KP0: // INSERT
             case KEY_KPDOT: // DELETE
             case KEY_KP9: // PAGEUP
             case KEY_KP3: // PAGEDOWN
-            /*getchar();
-            getchar();
-            getchar(); */
                 discardBytes = 3;
                 break;
             case KEY_F5:
@@ -233,10 +217,6 @@ static int readKey(void) {
             case KEY_F10:
             case KEY_F11:
             case KEY_F12:
-          /*      getchar();
-                getchar();
-                getchar();
-                getchar(); */
                 discardBytes = 4;
                 break;
 
@@ -269,9 +249,19 @@ int _getch(void) {
     return key;
 }
 
+int getch(void)
+{
+    return _getch();
+}
+
 int _ungetch(int ch)
 {
     return ungetc(ch, stdin);
+}
+
+int ungetch(int ch)
+{
+    return _ungetch(ch);
 }
 
 int *cinPeekCount(ushort count)
