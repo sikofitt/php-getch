@@ -2,8 +2,9 @@
 
 This simply uses the FFI extension to enable _getch and _ungetch in Windows and linux.
 
-[![pipeline status](https://repos.bgemi.net/olive/PHP/getch/badges/1.x/pipeline.svg)](https://repos.bgemi.net/sikofitt/getch/-/commits/1.x)
-[![coverage report](https://repos.bgemi.net/olive/PHP/getch/badges/1.x/coverage.svg)](https://repos.bgemi.net/sikofitt/getch/-/commits/1.x)
+[![Pipeline status](https://code.bgemi.net/olive/PHP/getch/badges/1.x/pipeline.svg)](https://code.bgemi.net/olive/PHP/getch/-/commits/1.x)
+[![Coverage report](https://code.bgemi.net/olive/PHP/getch/badges/1.x/coverage.svg)](https://code.bgemi.net/olive/PHP/getch/-/commits/1.x)
+[![Latest Release](https://code.bgemi.net/olive/PHP/getch/-/badges/release.svg)](https://code.bgemi.net/olive/PHP/getch/-/releases)
 
 ```shell script
 $ composer require olivebbs/getch
