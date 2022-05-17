@@ -1,9 +1,9 @@
 <?php
 
-namespace Sikofitt\Tests\Console\Getch;
+namespace Olive\Tests\Console\Getch;
 
 use PHPUnit\Framework\TestCase;
-use Sikofitt\Console\Getch;
+use Olive\Console\Getch;
 
 class GetchTest extends TestCase
 {

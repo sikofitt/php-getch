@@ -1,9 +1,9 @@
 <?php
 
-namespace Sikofitt\Tests\Console\Ungetch;
+namespace Olive\Tests\Console\Ungetch;
 
 use PHPUnit\Framework\TestCase;
-use Sikofitt\Console\Getch;
+use Olive\Console\Getch;
 
 class UngetchTest extends TestCase
 {
