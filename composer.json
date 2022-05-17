@@ -2,6 +2,7 @@
     "name": "olivebbs/getch",
     "description": "Implements _getch and _ungetch for windows and linux using ffi",
     "type": "library",
+    "keywords": ["getch", "windows", "conio", "linux", "console", "conio.h", "hotkey", "termios"],
     "require": {
         "php": ">=7.4",
         "ext-ffi": "*"
@@ -29,5 +30,8 @@
             "name": "R. Eric Wheeler",
             "email": "sikofitt@gmail.com"
         }
-    ]
+    ],
+    "conflict": {
+      "sikofitt/getch": "*"
+    }
 }
