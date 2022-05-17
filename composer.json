@@ -1,5 +1,5 @@
 {
-    "name": "sikofitt/getch",
+    "name": "olivebbs/getch",
     "description": "Implements _getch and _ungetch for windows and linux using ffi",
     "type": "library",
     "require": {
@@ -8,12 +8,11 @@
     },
   "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.18",
-        "jetbrains/phpstorm-stubs": "dev-master",
         "phpunit/phpunit": "^9.5"
     },
   "autoload": {
     "psr-4": {
-      "Sikofitt\\Console\\": "src/Console/"
+      "Olive\\Console\\": "src/Console/"
     },
     "files": [
       "functions.php"
@@ -21,7 +20,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Sikofitt\\Tests\\Console\\": "tests/"
+      "Olive\\Tests\\Console\\": "tests/"
     }
   },
   "license": "MPL-2.0",

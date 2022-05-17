@@ -2,15 +2,16 @@
 
 This simply uses the FFI extension to enable _getch and _ungetch in Windows and linux.
 
-[![pipeline status](https://repos.bgemi.net/sikofitt/getch/badges/1.x/pipeline.svg)](https://repos.bgemi.net/sikofitt/getch/-/commits/1.x)
-[![coverage report](https://repos.bgemi.net/sikofitt/getch/badges/1.x/coverage.svg)](https://repos.bgemi.net/sikofitt/getch/-/commits/1.x)
+[![Pipeline status](https://code.bgemi.net/olive/PHP/getch/badges/1.x/pipeline.svg)](https://code.bgemi.net/olive/PHP/getch/-/commits/1.x)
+[![Coverage report](https://code.bgemi.net/olive/PHP/getch/badges/1.x/coverage.svg)](https://code.bgemi.net/olive/PHP/getch/-/commits/1.x)
+[![Latest Release](https://code.bgemi.net/olive/PHP/getch/-/badges/release.svg)](https://code.bgemi.net/olive/PHP/getch/-/releases)
 
 ```shell script
-$ composer require sikofitt/getch:dev-master
+$ composer require olivebbs/getch
 ```
 
 ```php
- use Sikofitt\Console\Getch;
+ use Olive\Console\Getch;
  $g = new Getch($linuxLibrary = null); // can also be a library that implements a function called _getch;
                                        // by default uses the bundled Resources/libgetch.so
                                        // on windows uses the built in _getch function.
@@ -45,7 +46,7 @@ Note that if you want to put a word into the STDIN stack, you need to do it in r
 There are also helper functions called getch() and ungetch();
 
 ```php
-use function Sikofitt\Console\getch;
+use function Olive\Console\getch;
 $ord = getch($linuxLibrary = null);
 print \chr($ord);
 
