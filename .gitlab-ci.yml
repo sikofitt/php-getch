@@ -34,7 +34,7 @@ test:8.0:
   image: php:8.0
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
-test:8.1
+test:8.1:
   only:
     - 1.x
   tags:
