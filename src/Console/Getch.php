@@ -12,7 +12,7 @@ declare(strict_types=1);
  * You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-namespace Sikofitt\Console;
+namespace Olive\Console;
 
 use FFI;
 use RuntimeException;
