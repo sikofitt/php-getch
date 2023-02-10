@@ -4,11 +4,11 @@
     "type": "library",
     "keywords": ["getch", "windows", "conio", "linux", "console", "conio.h", "hotkey", "termios"],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "ext-ffi": "*"
     },
   "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.18",
+        "friendsofphp/php-cs-fixer": "^3.14",
         "phpunit/phpunit": "^9.5"
     },
   "autoload": {
