@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * Copyright (c) 2020  https://rewiv.com sikofitt@gmail.com
+ * Copyright (c) 2020-2024  https://sikofitt.com sikofitt@gmail.com
  *
  * This Source Code Form is subject to the
  * terms of the Mozilla Public License, v. 2.0.
