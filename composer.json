@@ -1,7 +1,8 @@
 {
-    "name": "sikofitt/getch",
+    "name": "olivebbs/getch",
     "description": "Implements _getch and _ungetch for windows and linux using ffi",
     "type": "library",
+    "keywords": ["getch", "windows", "conio", "linux", "console", "conio.h", "hotkey", "termios"],
     "require": {
         "php": "^8.2",
         "ext-ffi": "*"
@@ -11,7 +12,7 @@
     },
   "autoload": {
     "psr-4": {
-      "Sikofitt\\Console\\": "src/Console/"
+      "Olive\\Console\\": "src/Console/"
     },
     "files": [
       "functions.php"
@@ -19,7 +20,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Sikofitt\\Tests\\Console\\": "tests/"
+      "Olive\\Tests\\Console\\": "tests/"
     }
   },
   "license": "MPL-2.0",
@@ -28,5 +29,8 @@
             "name": "R. Eric Wheeler",
             "email": "sikofitt@gmail.com"
         }
-    ]
+    ],
+    "conflict": {
+      "sikofitt/getch": "*"
+    }
 }

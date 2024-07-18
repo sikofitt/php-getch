@@ -12,7 +12,7 @@ declare(strict_types=1);
  * You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-use Sikofitt\Console\Getch;
+use Olive\Console\Getch;
 
 if (!function_exists('getch')) {
     function getch(?string $linuxLibrary = null): int
