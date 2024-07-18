@@ -1,5 +1,5 @@
 {
-    "name": "sikofitt/getch",
+    "name": "olivebbs/getch",
     "description": "Implements _getch and _ungetch for windows and linux using ffi",
     "type": "library",
     "require": {
