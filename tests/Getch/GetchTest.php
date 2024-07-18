@@ -23,7 +23,9 @@ class GetchTest extends TestCase
 
     /**
      * @preserveGlobalState disabled
+     *
      * @backupStaticAttributes false
+     *
      * @backupGlobals false
      */
     public function testFailureOnInvalidLibrary()

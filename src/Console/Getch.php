@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Sikofitt\Console;
 
 use FFI;
-use RuntimeException;
 
 final class Getch
 {
@@ -60,10 +59,10 @@ final class Getch
 
     public static function resetFFI(): void
     {
-        static::$ffi = null;
+        self::$ffi = null;
     }
 
-    public function __construct(string $linuxLibrary = null)
+    public function __construct(?string $linuxLibrary = null)
     {
         if (null === $linuxLibrary) {
             $linuxLibrary = self::LINUX_LIBRARY;
@@ -76,12 +75,12 @@ final class Getch
                 self::$ffi = FFI::cdef($declarations, self::WINDOWS_LIBRARY);
             } elseif ('Linux' === $osFamily) {
                 if (!file_exists($linuxLibrary)) {
-                    throw new RuntimeException(sprintf('Could not find library file %s.', $linuxLibrary));
+                    throw new \RuntimeException(sprintf('Could not find library file %s.', $linuxLibrary));
                 }
                 $declarations = self::DECLARATIONS.' int cinPeek();';
                 self::$ffi = FFI::cdef($declarations, $linuxLibrary);
             } else {
-                throw new RuntimeException(sprintf('Sorry, %s is not supported yet.', $osFamily));
+                throw new \RuntimeException(sprintf('Sorry, %s is not supported yet.', $osFamily));
             }
         }
     }
@@ -89,9 +88,9 @@ final class Getch
     public function peek(): int
     {
         if (PHP_OS_FAMILY === 'Windows') {
-            if ($ffi->_kbhit()) {
-                $result = $ffi->_getch();
-                $ffi->_ungetch($result);
+            if (self::$ffi->_kbhit()) {
+                $result = self::$ffi->_getch();
+                self::$ffi->_ungetch($result);
 
                 return $result;
             }
@@ -99,7 +98,7 @@ final class Getch
             return -1;
         }
 
-        return $ffi->cinPeek();
+        return self::$ffi->cinPeek();
     }
 
     public function getch(): int
@@ -107,11 +106,8 @@ final class Getch
         return self::$ffi->_getch();
     }
 
-    public function ungetch($char): int
+    public function ungetch(string|int $char): int
     {
-        if (!is_string($char) && !is_int($char)) {
-            throw new \TypeError('ungetch takes a parameter of int or string.');
-        }
 
         if (is_string($char)) {
             $char = ord($char[0]);

@@ -15,19 +15,15 @@ declare(strict_types=1);
 use Sikofitt\Console\Getch;
 
 if (!function_exists('getch')) {
-    function getch(string $linuxLibrary = null): int
+    function getch(?string $linuxLibrary = null): int
     {
-        $g = new Getch($linuxLibrary);
-
-        return $g->getch();
+        return (new Getch($linuxLibrary))->getch();
     }
 }
 
 if (!function_exists('ungetch')) {
-    function ungetch($char, string $linuxLibrary = null): int
+    function ungetch($char, ?string $linuxLibrary = null): int
     {
-        $g = new Getch($linuxLibrary);
-
-        return $g->ungetch($char);
+        return (new Getch($linuxLibrary))->ungetch($char);
     }
 }

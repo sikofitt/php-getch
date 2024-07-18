@@ -1,11 +1,12 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__)
-    ->exclude('var')
-;
+use PhpCsFixer\Config;
 
-return PhpCsFixer\Config::create()
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__ . '/src')
+    ->in(__DIR__ . '/tests')
+;
+return (new Config())
     ->setRules([
         '@Symfony' => true,
         'array_syntax' => ['syntax' => 'short'],
