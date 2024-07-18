@@ -3,13 +3,11 @@
     "description": "Implements _getch and _ungetch for windows and linux using ffi",
     "type": "library",
     "require": {
-        "php": ">=7.4",
+        "php": "^8.2",
         "ext-ffi": "*"
     },
   "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.18",
-        "jetbrains/phpstorm-stubs": "dev-master",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.6"
     },
   "autoload": {
     "psr-4": {

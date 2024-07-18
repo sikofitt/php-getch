@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * Copyright (c) 2020  https://rewiv.com sikofitt@gmail.com
+ * Copyright (c) 2020-2024  https://sikofitt.com sikofitt@gmail.com
  *
  * This Source Code Form is subject to the
  * terms of the Mozilla Public License, v. 2.0.
@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Sikofitt\Console;
 
-use FFI;
-use RuntimeException;
-
 final class Getch
 {
     // Special key codes
@@ -25,7 +22,7 @@ final class Getch
     public const KEY_E0 = 0;
     public const KEY_E1 = 224;
 
-    // Supported scan scodes.
+    // Supported scan codes.
     public const KEY_F1 = 59;
     public const KEY_F2 = 60;
     public const KEY_F3 = 61;
@@ -56,14 +53,14 @@ final class Getch
         int _ungetch(int c);
     DECLARATIONS;
 
-    private static ?FFI $ffi = null;
+    private static ?\FFI $ffi = null;
 
     public static function resetFFI(): void
     {
-        static::$ffi = null;
+        self::$ffi = null;
     }
 
-    public function __construct(string $linuxLibrary = null)
+    public function __construct(?string $linuxLibrary = null)
     {
         if (null === $linuxLibrary) {
             $linuxLibrary = self::LINUX_LIBRARY;
@@ -73,15 +70,15 @@ final class Getch
             $osFamily = PHP_OS_FAMILY;
             if ('Windows' === $osFamily) {
                 $declarations = self::DECLARATIONS.' int _kbhit();';
-                self::$ffi = FFI::cdef($declarations, self::WINDOWS_LIBRARY);
+                self::$ffi = \FFI::cdef($declarations, self::WINDOWS_LIBRARY);
             } elseif ('Linux' === $osFamily) {
                 if (!file_exists($linuxLibrary)) {
-                    throw new RuntimeException(sprintf('Could not find library file %s.', $linuxLibrary));
+                    throw new \RuntimeException(sprintf('Could not find library file %s.', $linuxLibrary));
                 }
                 $declarations = self::DECLARATIONS.' int cinPeek();';
-                self::$ffi = FFI::cdef($declarations, $linuxLibrary);
+                self::$ffi = \FFI::cdef($declarations, $linuxLibrary);
             } else {
-                throw new RuntimeException(sprintf('Sorry, %s is not supported yet.', $osFamily));
+                throw new \RuntimeException(sprintf('Sorry, %s is not supported yet.', $osFamily));
             }
         }
     }
@@ -89,9 +86,9 @@ final class Getch
     public function peek(): int
     {
         if (PHP_OS_FAMILY === 'Windows') {
-            if ($ffi->_kbhit()) {
-                $result = $ffi->_getch();
-                $ffi->_ungetch($result);
+            if (self::$ffi->_kbhit()) {
+                $result = self::$ffi->_getch();
+                self::$ffi->_ungetch($result);
 
                 return $result;
             }
@@ -99,7 +96,7 @@ final class Getch
             return -1;
         }
 
-        return $ffi->cinPeek();
+        return self::$ffi->cinPeek();
     }
 
     public function getch(): int
@@ -107,12 +104,8 @@ final class Getch
         return self::$ffi->_getch();
     }
 
-    public function ungetch($char): int
+    public function ungetch(string|int $char): int
     {
-        if (!is_string($char) && !is_int($char)) {
-            throw new \TypeError('ungetch takes a parameter of int or string.');
-        }
-
         if (is_string($char)) {
             $char = ord($char[0]);
         }
